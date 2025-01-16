@@ -1,115 +1,297 @@
-Program.cs:
+using System;
+
 public class Nodo
 {
-    public int Dato;       // Almacena el valor de cada nodo
-    public Nodo Siguiente; // Apunta al siguiente nodo de la lista
+    public object Valor;
+    public Nodo Siguiente;
 
-    public Nodo(int dato)
+    public Nodo(object valor)
     {
-        Dato = dato;
+        Valor = valor;
         Siguiente = null;
     }
 }
-ListaEnlazada.cs:
+
 public class ListaEnlazada
 {
-    public Nodo Cabeza; // Apunta al primer nodo de la lista
+    private Nodo cabeza;
 
     public ListaEnlazada()
     {
-        Cabeza = null;
+        cabeza = null;
     }
 
-    // Método para agregar un nuevo nodo al final de la lista
-    public void Agregar(int dato)
-    {
-        Nodo nuevoNodo = new Nodo(dato);
-        if (Cabeza == null)
-        {
-            Cabeza = nuevoNodo;
-        }
-        else
-        {
-            Nodo actual = Cabeza;
-            while (actual.Siguiente != null)
-            {
-                actual = actual.Siguiente;
-            }
-            actual.Siguiente = nuevoNodo;
-        }
-    }
-
-    // Método para contar los elementos de la lista
+    // 1. Función que calcule el número de elementos de una lista
     public int ContarElementos()
     {
         int contador = 0;
-        Nodo actual = Cabeza;
-        while (actual != null)
+        Nodo temp = cabeza;
+        while (temp != null)
         {
             contador++;
-            actual = actual.Siguiente;
+            temp = temp.Siguiente;
         }
         return contador;
     }
 
-    // Método para invertir la lista
+    // 2. Invertir una lista enlazada
     public void Invertir()
     {
-        Nodo anterior = null;
-        Nodo actual = Cabeza;
-        Nodo siguiente = null;
+        Nodo prev = null;
+        Nodo current = cabeza;
+        Nodo next = null;
 
-        while (actual != null)
+        while (current != null)
         {
-            siguiente = actual.Siguiente;
-            actual.Siguiente = anterior;
-            anterior = actual;
-            actual = siguiente;
+            next = current.Siguiente;
+            current.Siguiente = prev;
+            prev = current;
+            current = next;
         }
-        Cabeza = anterior;
+        cabeza = prev;
     }
 
-    // Método para mostrar los elementos de la lista
-    public void Mostrar()
+    // 3. Implementar el método de búsqueda
+    public int Buscar(int valor)
     {
-        Nodo actual = Cabeza;
-        while (actual != null)
+        int contador = 0;
+        Nodo temp = cabeza;
+        while (temp != null)
         {
-            Console.Write(actual.Dato + " ");
-            actual = actual.Siguiente;
+            if (temp.Valor.Equals(valor))
+            {
+                contador++;
+            }
+            temp = temp.Siguiente;
+        }
+
+        if (contador > 0)
+        {
+            return contador;
+        }
+        else
+        {
+            Console.WriteLine("Dato no encontrado.");
+            return 0;
+        }
+    }
+
+    // 4. Crear lista con 50 números aleatorios y eliminar los nodos fuera de un rango
+    public void EliminarFueraDeRango(int min, int max)
+    {
+        Nodo temp = cabeza;
+        Nodo prev = null;
+
+        while (temp != null)
+        {
+            if ((int)temp.Valor < min || (int)temp.Valor > max)
+            {
+                if (prev == null)
+                {
+                    cabeza = temp.Siguiente;
+                }
+                else
+                {
+                    prev.Siguiente = temp.Siguiente;
+                }
+            }
+            prev = temp;
+            temp = temp.Siguiente;
+        }
+    }
+
+    // 5. Manejar listas de números primos y Armstrong
+    public bool EsPrimo(int numero)
+    {
+        if (numero <= 1) return false;
+        for (int i = 2; i <= Math.Sqrt(numero); i++)
+        {
+            if (numero % i == 0) return false;
+        }
+        return true;
+    }
+
+    public bool EsArmstrong(int numero)
+    {
+        int suma = 0, n = numero, r;
+        int numDigits = numero.ToString().Length;
+        while (n > 0)
+        {
+            r = n % 10;
+            suma += (int)Math.Pow(r, numDigits);
+            n /= 10;
+        }
+        return suma == numero;
+    }
+
+    // 6. Registro de estudiantes
+    public class Estudiante
+    {
+        public string Cedula;
+        public string Nombre;
+        public string Apellido;
+        public string Correo;
+        public double NotaDefinitiva;
+
+        public Estudiante(string cedula, string nombre, string apellido, string correo, double nota)
+        {
+            Cedula = cedula;
+            Nombre = nombre;
+            Apellido = apellido;
+            Correo = correo;
+            NotaDefinitiva = nota;
+        }
+    }
+
+    public void AgregarEstudiante(Estudiante estudiante, bool aprobado)
+    {
+        Nodo nuevoNodo = new Nodo(estudiante);
+        if (aprobado)
+        {
+            nuevoNodo.Siguiente = cabeza;
+            cabeza = nuevoNodo;
+        }
+        else
+        {
+            if (cabeza == null)
+            {
+                cabeza = nuevoNodo;
+            }
+            else
+            {
+                Nodo temp = cabeza;
+                while (temp.Siguiente != null)
+                {
+                    temp = temp.Siguiente;
+                }
+                temp.Siguiente = nuevoNodo;
+            }
+        }
+    }
+
+    // 7. Registro de vehículos
+    public class Vehiculo
+    {
+        public string Placa;
+        public string Marca;
+        public string Modelo;
+        public int Año;
+        public double Precio;
+
+        public Vehiculo(string placa, string marca, string modelo, int año, double precio)
+        {
+            Placa = placa;
+            Marca = marca;
+            Modelo = modelo;
+            Año = año;
+            Precio = precio;
+        }
+    }
+
+    public void AgregarVehiculo(Vehiculo vehiculo)
+    {
+        Nodo nuevoNodo = new Nodo(vehiculo);
+        if (cabeza == null)
+        {
+            cabeza = nuevoNodo;
+        }
+        else
+        {
+            Nodo temp = cabeza;
+            while (temp.Siguiente != null)
+            {
+                temp = temp.Siguiente;
+            }
+            temp.Siguiente = nuevoNodo;
+        }
+    }
+
+    // 8. Manejar lista de datos reales y calcular el promedio
+    public void SepararDatosPorPromedio()
+    {
+        double suma = 0;
+        int contador = 0;
+        Nodo temp = cabeza;
+
+        while (temp != null)
+        {
+            suma += Convert.ToDouble(temp.Valor);
+            contador++;
+            temp = temp.Siguiente;
+        }
+
+        double promedio = suma / contador;
+        Console.WriteLine($"Promedio: {promedio}");
+
+        Nodo menores = null, mayores = null;
+
+        temp = cabeza;
+        while (temp != null)
+        {
+            if (Convert.ToDouble(temp.Valor) <= promedio)
+            {
+                // Agregar a la lista de menores
+            }
+            else
+            {
+                // Agregar a la lista de mayores
+            }
+            temp = temp.Siguiente;
+        }
+    }
+
+    // 9. Comparar dos listas de enteros
+    public bool CompararListas(ListaEnlazada lista2)
+    {
+        Nodo temp1 = cabeza;
+        Nodo temp2 = lista2.cabeza;
+        while (temp1 != null && temp2 != null)
+        {
+            if (!temp1.Valor.Equals(temp2.Valor))
+                return false;
+            temp1 = temp1.Siguiente;
+            temp2 = temp2.Siguiente;
+        }
+        return temp1 == null && temp2 == null;
+    }
+
+    // Imprimir lista
+    public void ImprimirLista()
+    {
+        Nodo temp = cabeza;
+        while (temp != null)
+        {
+            Console.Write(temp.Valor + " ");
+            temp = temp.Siguiente;
         }
         Console.WriteLine();
     }
 }
-Program.cs
-using System;
 
-public class Program
+class Program
 {
-    public static void Main()
+    static void Main()
     {
-        // Crear una nueva lista enlazada
         ListaEnlazada lista = new ListaEnlazada();
 
-        // Agregar algunos nodos a la lista
-        lista.Agregar(1);
-        lista.Agregar(2);
-        lista.Agregar(3);
-        lista.Agregar(4);
-        lista.Agregar(5);
+        // Ejemplo de uso para los ejercicios
 
-        // Mostrar la lista original
-        Console.WriteLine("Lista original:");
-        lista.Mostrar();
+        // Agregar estudiantes
+        Estudiante estudiante1 = new Estudiante("1750037861", "Jennyfer", "Klayre", "jennyfer@correo.com", 8.5);
+        lista.AgregarEstudiante(estudiante1, true); // Estudiante aprobado
 
-        // Contar los elementos de la lista
-        Console.WriteLine("Número de elementos en la lista: " + lista.ContarElementos());
+        // Agregar vehículos
+        Vehiculo vehiculo1 = new Vehiculo("ABC123", "Toyota", "Corolla", 2020, 20000);
+        lista.AgregarVehiculo(vehiculo1);
 
-        // Invertir la lista
+        // Contar elementos
+        Console.WriteLine("Cantidad de elementos: " + lista.ContarElementos());
+
+        // Buscar un dato
+        Console.WriteLine("Número de veces que se encuentra el valor 8: " + lista.Buscar(8));
+
+        // Invertir lista
         lista.Invertir();
-
-        // Mostrar la lista invertida
-        Console.WriteLine("Lista invertida:");
-        lista.Mostrar();
+        lista.ImprimirLista();
     }
 }
