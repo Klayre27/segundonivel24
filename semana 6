@@ -1,0 +1,115 @@
+Program.cs:
+public class Nodo
+{
+    public int Dato;       // Almacena el valor de cada nodo
+    public Nodo Siguiente; // Apunta al siguiente nodo de la lista
+
+    public Nodo(int dato)
+    {
+        Dato = dato;
+        Siguiente = null;
+    }
+}
+ListaEnlazada.cs:
+public class ListaEnlazada
+{
+    public Nodo Cabeza; // Apunta al primer nodo de la lista
+
+    public ListaEnlazada()
+    {
+        Cabeza = null;
+    }
+
+    // Método para agregar un nuevo nodo al final de la lista
+    public void Agregar(int dato)
+    {
+        Nodo nuevoNodo = new Nodo(dato);
+        if (Cabeza == null)
+        {
+            Cabeza = nuevoNodo;
+        }
+        else
+        {
+            Nodo actual = Cabeza;
+            while (actual.Siguiente != null)
+            {
+                actual = actual.Siguiente;
+            }
+            actual.Siguiente = nuevoNodo;
+        }
+    }
+
+    // Método para contar los elementos de la lista
+    public int ContarElementos()
+    {
+        int contador = 0;
+        Nodo actual = Cabeza;
+        while (actual != null)
+        {
+            contador++;
+            actual = actual.Siguiente;
+        }
+        return contador;
+    }
+
+    // Método para invertir la lista
+    public void Invertir()
+    {
+        Nodo anterior = null;
+        Nodo actual = Cabeza;
+        Nodo siguiente = null;
+
+        while (actual != null)
+        {
+            siguiente = actual.Siguiente;
+            actual.Siguiente = anterior;
+            anterior = actual;
+            actual = siguiente;
+        }
+        Cabeza = anterior;
+    }
+
+    // Método para mostrar los elementos de la lista
+    public void Mostrar()
+    {
+        Nodo actual = Cabeza;
+        while (actual != null)
+        {
+            Console.Write(actual.Dato + " ");
+            actual = actual.Siguiente;
+        }
+        Console.WriteLine();
+    }
+}
+Program.cs
+using System;
+
+public class Program
+{
+    public static void Main()
+    {
+        // Crear una nueva lista enlazada
+        ListaEnlazada lista = new ListaEnlazada();
+
+        // Agregar algunos nodos a la lista
+        lista.Agregar(1);
+        lista.Agregar(2);
+        lista.Agregar(3);
+        lista.Agregar(4);
+        lista.Agregar(5);
+
+        // Mostrar la lista original
+        Console.WriteLine("Lista original:");
+        lista.Mostrar();
+
+        // Contar los elementos de la lista
+        Console.WriteLine("Número de elementos en la lista: " + lista.ContarElementos());
+
+        // Invertir la lista
+        lista.Invertir();
+
+        // Mostrar la lista invertida
+        Console.WriteLine("Lista invertida:");
+        lista.Mostrar();
+    }
+}
