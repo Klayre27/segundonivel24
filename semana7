@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    /// <summary>
+    /// Verifica si una fórmula matemática tiene paréntesis, corchetes y llaves balanceados.
+    /// </summary>
+    /// <param name="formula">La fórmula matemática a evaluar.</param>
+    /// <returns>True si está balanceada, False en caso contrario.</returns>
+    public static bool IsBalanced(string formula)
+    {
+        Stack<char> stack = new Stack<char>();
+        foreach (char c in formula)
+        {
+            if (c == '(' || c == '{' || c == '[')
+            {
+                stack.Push(c);
+            }
+            else if (c == ')' || c == '}' || c == ']')
+            {
+                if (stack.Count == 0) return false;
+                char top = stack.Pop();
+                if ((c == ')' && top != '(') || 
+                    (c == '}' && top != '{') || 
+                    (c == ']' && top != '['))
+                {
+                    return false;
+                }
+            }
+        }
+        return stack.Count == 0;
+    }
+
+    /// <summary>
+    /// Resuelve el problema de las Torres de Hanoi.
+    /// </summary>
+    /// <param name="n">Número de discos.</param>
+    /// <param name="from">Torre de origen.</param>
+    /// <param name="to">Torre de destino.</param>
+    /// <param name="aux">Torre auxiliar.</param>
+    public static void SolveHanoi(int n, char from, char to, char aux)
+    {
+        if (n == 1)
+        {
+            Console.WriteLine($"Mover disco 1 desde {from} hacia {to}");
+            return;
+        }
+        SolveHanoi(n - 1, from, aux, to);
+        Console.WriteLine($"Mover disco {n} desde {from} hacia {to}");
+        SolveHanoi(n - 1, aux, to, from);
+    }
+
+    static void Main()
+    {
+        // Parte 1: Verificación de balanceo
+        string formula = "{7+(8*5)-[(9-7)+(4+1)]}";
+        Console.WriteLine("Verificando fórmula:");
+        Console.WriteLine(IsBalanced(formula) ? "Fórmula balanceada" : "Fórmula no balanceada");
+
+        // Parte 2: Torres de Hanoi
+        Console.WriteLine("\nResolviendo Torres de Hanoi:");
+        int numDisks = 3; // Cambia este valor si es necesario
+        SolveHanoi(numDisks, 'A', 'C', 'B');
+    }
+}
