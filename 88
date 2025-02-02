@@ -1,0 +1,100 @@
+// Programa en C# para la Asignación de 30 Asientos en Orden de Llegada
+// Simulación de una cola para una atracción en un parque de diversiones
+
+using System;
+using System.Collections.Generic;
+
+namespace ParqueDiversiones
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ColaAtraccion cola = new ColaAtraccion(30);
+            
+            while (true)
+            {
+                Console.WriteLine("\n1. Agregar persona a la cola");
+                Console.WriteLine("2. Subir persona a la atracción");
+                Console.WriteLine("3. Ver cola actual");
+                Console.WriteLine("4. Salir");
+                Console.Write("Seleccione una opción: ");
+
+                string opcion = Console.ReadLine();
+                switch (opcion)
+                {
+                    case "1":
+                        Console.Write("Ingrese el nombre de la persona: ");
+                        string nombre = Console.ReadLine();
+                        cola.AgregarPersona(nombre);
+                        break;
+                    case "2":
+                        cola.SubirAtraccion();
+                        break;
+                    case "3":
+                        cola.MostrarCola();
+                        break;
+                    case "4":
+                        return;
+                    default:
+                        Console.WriteLine("Opción no válida, intente nuevamente.");
+                        break;
+                }
+            }
+        }
+    }
+
+    public class ColaAtraccion
+    {
+        private Queue<string> cola;
+        private int capacidad;
+
+        public ColaAtraccion(int capacidad)
+        {
+            this.capacidad = capacidad;
+            cola = new Queue<string>();
+        }
+
+        public void AgregarPersona(string nombre)
+        {
+            if (cola.Count < capacidad)
+            {
+                cola.Enqueue(nombre);
+                Console.WriteLine($"{nombre} ha sido agregado a la cola.");
+            }
+            else
+            {
+                Console.WriteLine("Todos los asientos están ocupados.");
+            }
+        }
+
+        public void SubirAtraccion()
+        {
+            if (cola.Count > 0)
+            {
+                string persona = cola.Dequeue();
+                Console.WriteLine($"{persona} ha subido a la atracción.");
+            }
+            else
+            {
+                Console.WriteLine("No hay personas en la cola.");
+            }
+        }
+
+        public void MostrarCola()
+        {
+            if (cola.Count > 0)
+            {
+                Console.WriteLine("Personas en la cola:");
+                foreach (var persona in cola)
+                {
+                    Console.WriteLine(persona);
+                }
+            }
+            else
+            {
+                Console.WriteLine("La cola está vacía.");
+            }
+        }
+    }
+}
