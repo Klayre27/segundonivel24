@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        // Generación de los ciudadanos (500 ciudadanos)
+        var ciudadanos = new HashSet<string>();
+        for (int i = 1; i <= 500; i++)
+        {
+            ciudadanos.Add($"Ciudadano {i}");
+        }
+
+        // Generación de los vacunados con Pfizer (75 ciudadanos)
+        var vacunadosPfizer = new HashSet<string>();
+        for (int i = 1; i <= 75; i++)
+        {
+            vacunadosPfizer.Add($"Ciudadano {i}");
+        }
+
+        // Generación de los vacunados con AstraZeneca (75 ciudadanos)
+        var vacunadosAstraZeneca = new HashSet<string>();
+        for (int i = 76; i <= 150; i++)  // Ciudadanos del 76 al 150
+        {
+            vacunadosAstraZeneca.Add($"Ciudadano {i}");
+        }
+
+        // Ciudadanos no vacunados
+        var noVacunados = ciudadanos.Except(vacunadosPfizer.Union(vacunadosAstraZeneca)).ToList();
+        
+        // Ciudadanos con las dos vacunas
+        var conAmbasVacunas = vacunadosPfizer.Intersect(vacunadosAstraZeneca).ToList();
+        
+        // Ciudadanos vacunados solo con Pfizer
+        var soloPfizer = vacunadosPfizer.Except(vacunadosAstraZeneca).ToList();
+        
+        // Ciudadanos vacunados solo con AstraZeneca
+        var soloAstraZeneca = vacunadosAstraZeneca.Except(vacunadosPfizer).ToList();
+
+        // Imprimir resultados
+        Console.WriteLine("Ciudadanos no vacunados:");
+        foreach (var ciudadano in noVacunados) 
+            Console.WriteLine(ciudadano);
+        
+        Console.WriteLine("\nCiudadanos con ambas vacunas:");
+        foreach (var ciudadano in conAmbasVacunas) 
+            Console.WriteLine(ciudadano);
+        
+        Console.WriteLine("\nCiudadanos vacunados solo con Pfizer:");
+        foreach (var ciudadano in soloPfizer) 
+            Console.WriteLine(ciudadano);
+        
+        Console.WriteLine("\nCiudadanos vacunados solo con AstraZeneca:");
+        foreach (var ciudadano in soloAstraZeneca) 
+            Console.WriteLine(ciudadano);
+    }
+}
