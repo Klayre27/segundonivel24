@@ -1,0 +1,84 @@
+# practica03.py
+import json
+
+class TorneoFutbol:
+    def __init__(self):
+        self.equipos = {}  # Diccionario para almacenar equipos y sus jugadores
+
+    def agregar_equipo(self, nombre_equipo):
+        """Agrega un nuevo equipo al torneo."""
+        if nombre_equipo not in self.equipos:
+            self.equipos[nombre_equipo] = set()  # Cada equipo tiene un conjunto de jugadores
+            print(f"Equipo '{nombre_equipo}' agregado correctamente.")
+        else:
+            print(f"El equipo '{nombre_equipo}' ya existe.")
+
+    def agregar_jugador(self, nombre_equipo, nombre_jugador):
+        """Agrega un jugador a un equipo existente."""
+        if nombre_equipo in self.equipos:
+            self.equipos[nombre_equipo].add(nombre_jugador)
+            print(f"Jugador '{nombre_jugador}' agregado al equipo '{nombre_equipo}'.")
+        else:
+            print(f"El equipo '{nombre_equipo}' no existe. Agrega el equipo primero.")
+
+    def mostrar_equipos(self):
+        """Muestra todos los equipos y sus jugadores."""
+        if not self.equipos:
+            print("No hay equipos registrados.")
+        else:
+            for equipo, jugadores in self.equipos.items():
+                print(f"\nEquipo: {equipo}")
+                print("Jugadores:", ", ".join(jugadores) if jugadores else "Sin jugadores")
+
+    def guardar_datos(self, archivo="torneo.json"):
+        """Guarda los datos del torneo en un archivo JSON."""
+        with open(archivo, "w") as f:
+            json.dump(self.equipos, f, indent=4)
+        print(f"Datos guardados en {archivo}")
+
+    def cargar_datos(self, archivo="torneo.json"):
+        """Carga los datos del torneo desde un archivo JSON."""
+        try:
+            with open(archivo, "r") as f:
+                self.equipos = json.load(f)
+            print("Datos cargados correctamente.")
+        except FileNotFoundError:
+            print("No hay datos previos guardados.")
+
+# Interfaz en consola
+def menu():
+    torneo = TorneoFutbol()
+    torneo.cargar_datos()
+
+    while True:
+        print("\n--- Menú Torneo de Fútbol ---")
+        print("1. Agregar equipo")
+        print("2. Agregar jugador a un equipo")
+        print("3. Mostrar equipos y jugadores")
+        print("4. Guardar y salir")
+        
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            nombre_equipo = input("Ingrese el nombre del equipo: ")
+            torneo.agregar_equipo(nombre_equipo)
+
+        elif opcion == "2":
+            nombre_equipo = input("Ingrese el nombre del equipo: ")
+            nombre_jugador = input("Ingrese el nombre del jugador: ")
+            torneo.agregar_jugador(nombre_equipo, nombre_jugador)
+
+        elif opcion == "3":
+            torneo.mostrar_equipos()
+
+        elif opcion == "4":
+            torneo.guardar_datos()
+            print("¡Saliendo del programa!")
+            break
+
+        else:
+            print("Opción inválida, intente de nuevo.")
+
+# Ejecutar el programa
+if __name__ == "__main__":
+    menu()
